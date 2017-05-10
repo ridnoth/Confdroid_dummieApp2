@@ -9,24 +9,26 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-
-import java.io.BufferedReader;
-import java.io.FileOutputStream;
-import java.io.FileReader;
+import java.io.*;
 
 public class MainActivity extends AppCompatActivity {
     private Context ctx = this;
     private TextView name;
     private TextView password;
-    private String DB_pathway = "/data/data/com.example.glantz.dummie2/databases/dbtest";
     private TextView HelloWorld;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+                createStandardframe();
+    }
 
+    /**
+     * Displays name and password column in the textfield name and password.
+     */
+    private void createStandardframe() {
+        setContentView(R.layout.activity_main);
+        //
         // Button Creation
         Button fetchButton = (Button) findViewById(R.id.FetchButton);
         Button readbutton = (Button) findViewById(R.id.ReadButton);
@@ -62,13 +64,10 @@ public class MainActivity extends AppCompatActivity {
                 insertIntoDB(db);
             }
         });
+
+
     }
 
-    /**
-     * Displays name and password column in the textfield name and password.
-     *
-     * @param SQLiteDatabase
-     */
     private void getDatabaseInfo(SQLiteDatabase db) {
         Cursor cursor = db.rawQuery("SELECT name, password FROM user;", null);
         String names = "Name:" + "\n";
@@ -87,16 +86,14 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Drops the user table if it exist and recreates it with some sample data.
-     *
-     * @param SQLiteDatabase
      */
     private void insertIntoDB(SQLiteDatabase db) {
         db.execSQL("DROP TABLE IF EXISTS user");
         db.execSQL("CREATE TABLE user( userName_email TEXT ,name TEXT ,password TEXT);");
-        db.execSQL("INSERT INTO user(userName_email,name,password) VALUES('hglantz@kth.se','Hampus','test');");
-        db.execSQL("INSERT INTO user(userName_email,name,password) VALUES('matkag@kth.se','Mattias','flumm');");
-        db.execSQL("INSERT INTO user(userName_email,name,password) VALUES('johnmagn@kth.se','John','dumm');");
-        db.execSQL("INSERT INTO user(userName_email,name,password) VALUES('eliasax@kth.se','Elias','knas');");
+        db.execSQL("INSERT INTO user(userName_email,name,password) VALUES('hglantz@kth.se','Hampus','Glantz');");
+        db.execSQL("INSERT INTO user(userName_email,name,password) VALUES('matkag@kth.se','Mattias','Kågström');");
+        db.execSQL("INSERT INTO user(userName_email,name,password) VALUES('johnmagn@kth.se','John','Magnusson');");
+        db.execSQL("INSERT INTO user(userName_email,name,password) VALUES('eliasax@kth.se','Elias','Axelsson');");
     }
 
     /**
@@ -140,18 +137,6 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
 
-    /**
-     * For future use possible to show the DB_pathway in the Hello World textfield.
-     * Don't forget to add a button for this.
-     */
-    private void showDB_pathway() {
-        HelloWorld = (TextView) findViewById(R.id.helloworld);
-        HelloWorld.setText(DB_pathway);
-        name = (TextView) findViewById(R.id.name);
-        name.setText("");
-        password = (TextView) findViewById(R.id.password);
-        password.setText("");
     }
 }
